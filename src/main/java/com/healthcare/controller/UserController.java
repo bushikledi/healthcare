@@ -1,6 +1,6 @@
 package com.healthcare.controller;
 
-import com.healthcare.model.User;
+import com.healthcare.authentication.UserRequest;
 import com.healthcare.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +15,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<Void> register(@Valid @RequestBody User user) {
-        userService.save(user);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
     @DeleteMapping("/delete")
     public ResponseEntity<Void> delete() {
         userService.delete();
@@ -28,13 +22,13 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Void> update(@RequestBody User user) {
+    public ResponseEntity<Void> update(@RequestBody UserRequest user) {
         userService.update(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<User> getUser() {
+    @GetMapping("/info")
+    public ResponseEntity<UserRequest> getUser() {
         return ResponseEntity.ok(userService.getUser());
     }
 

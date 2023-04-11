@@ -1,8 +1,9 @@
 package com.healthcare.service;
 
+import com.healthcare.authentication.UserRequest;
 import com.healthcare.configuration.PasswordEncoder;
 import com.healthcare.model.User;
-import com.healthcare.model.enums.Role;
+import com.healthcare.repository.TokenRepository;
 import com.healthcare.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -12,41 +13,50 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final TokenRepository tokenRepository;
     private final AuthenticationService authenticationService;
+    private final PasswordEncoder passwordEncoder;
 
-    public void save(User user) {
-        try {
-            user.setRole(Role.USER);
-            user.setPassword(passwordEncoder.encoder().encode(user.getPassword()));
-            userRepository.save(user);
-        } catch (Exception e) {
-            throw new RuntimeException("Couldn't save user!\n" + e.getMessage());
-        }
-    }
-
-    public User getUser() {
-        return authenticationService.getUser();
+    public UserRequest getUser() {
+        User user = authenticationService.getUser();
+        return UserRequest.builder()
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .dateOfBirth(user.getDateOfBirth())
+                .gender(user.getGender())
+                .email(user.getEmail())
+                .password("")
+                .build();
     }
 
     @Transactional
     public void delete() {
         try {
-            userRepository.delete(
-                    authenticationService.getUser()
-            );
+            User user = authenticationService.getUser();
+            tokenRepository.deleteAllByUserId(user.getUserId());
+            userRepository.delete(user);
         } catch (Exception e) {
             throw new RuntimeException("Couldn't delete user!\n" + e.getMessage());
         }
     }
 
-    public void update(User userUpdate) {
+    public void update(UserRequest userRequest) {
         try {
             User user = authenticationService.getUser();
-            user.setFirstname(userUpdate.getFirstname());
-            user.setLastname(userUpdate.getLastname());
-            user.setEmail(userUpdate.getEmail());
-            user.setDateOfBirth(userUpdate.getDateOfBirth());
+            if (!userRequest.firstname().isEmpty())
+                user.setFirstname(userRequest.firstname());
+            if (!userRequest.lastname().isEmpty())
+                user.setLastname(userRequest.lastname());
+            if (!userRequest.dateOfBirth().toString().isEmpty())
+                user.setDateOfBirth(userRequest.dateOfBirth());
+            if (!userRequest.password().isEmpty()) {
+                if (userRequest.password().matches("^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$")) {
+                    user.setPassword(passwordEncoder.encoder().encode(userRequest.password()));
+                } else throw new IllegalArgumentException("Password must be at least 8 characters " +
+                        "long and contain both letters and numbers.");
+            }
+            if (!userRequest.gender().toString().isEmpty())
+                user.setGender(userRequest.gender());
             userRepository.save(user);
         } catch (Exception e) {
             throw new RuntimeException("Couldn't update user!\n" + e.getMessage());

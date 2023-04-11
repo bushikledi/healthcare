@@ -4,11 +4,8 @@ import com.healthcare.model.enums.Gender;
 import com.healthcare.model.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
+import jakarta.validation.constraints.Pattern;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,9 +14,11 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
-@Entity
+
 @Getter
 @Setter
+@Builder
+@Entity
 @Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,7 +31,7 @@ public class User implements UserDetails {
     private String firstname;
     @Column(name = "lastname", nullable = false)
     private String lastname;
-    @Length(min = 8)
+//    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$\n")
     @Column(name = "password")
     private String password;
     @Email
