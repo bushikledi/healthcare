@@ -77,7 +77,7 @@ public class JwtAuthService {
         tokenRepository.saveAll(validUserTokens);
     }
 
-    public AuthenticationResponse refreshToken(
+    public RefreshTokenResponse refreshToken(
             HttpServletRequest request
     ) {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -95,9 +95,9 @@ public class JwtAuthService {
                 String accessToken = jwtService.generateToken(user);
                 revokeUserTokens(user);
                 saveUserToken(user.getUserId(), accessToken);
-                return new AuthenticationResponse(accessToken, refreshToken);
+                return new RefreshTokenResponse(accessToken);
             }
         }
-        throw new RuntimeException("Couldn't extract user email!");
+        throw new RuntimeException("Couldn't refresh token!");
     }
 }

@@ -30,7 +30,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/token/refresh")
-    public ResponseEntity<AuthenticationResponse> refreshToken(
+    public ResponseEntity<RefreshTokenResponse> refreshToken(
             HttpServletRequest request
     ) {
         return ResponseEntity.ok(jwtAuthService.refreshToken(request));
