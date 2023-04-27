@@ -5,9 +5,9 @@ import com.healthcare.service.DoctorService;
 import com.healthcare.model.Doctor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,19 +48,17 @@ public class DoctorController {
 
 
 
-    public void updateDoctor(Doctor doctor) {
-        DoctorRepository doctorRepository = null;
-        Optional<Doctor> optionalDoctor = doctorRepository.findById(doctor.getId());
-        if (optionalDoctor.isPresent()) {
-            Doctor existingDoctor = optionalDoctor.get();
-            existingDoctor.setDoctorFirstname(doctor.getDoctorFirstname());
-            existingDoctor.setDoctorLastname(doctor.getDoctorLastname());
-            existingDoctor.setDoctorTelephone(doctor.getDoctorTelephone());
-            existingDoctor.setDoctorSpeciality(doctor.getDoctorSpeciality());
-            existingDoctor.setDoctorAbout(doctor.getDoctorAbout());
-            doctorRepository.save(existingDoctor);
+    @PutMapping("/{id}")
+    public ResponseEntity<Doctor> updateDoctor(@PathVariable Long id, @RequestBody Doctor doctor) {
+        Optional<Doctor> existingDoctor = doctorService.findDoctorById(id);
+        if (existingDoctor.isPresent()) {
+            Doctor updatedDoctor = doctorService.updateDoctor(id, doctor);
+            return new ResponseEntity<>(updatedDoctor, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
 
 
 

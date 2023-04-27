@@ -27,7 +27,7 @@ public class DoctorService {
         return doctor;
     }
 
-    public void updateDoctor(Doctor doctor) {
+    public Doctor updateDoctor(Long id, Doctor doctor) {
         Optional<Doctor> optionalDoctor = doctorRepository.findById(doctor.getId());
         if (optionalDoctor.isPresent()) {
             Doctor existingDoctor = optionalDoctor.get();
@@ -38,6 +38,7 @@ public class DoctorService {
             existingDoctor.setDoctorAbout(doctor.getDoctorAbout());
             doctorRepository.save(existingDoctor);
         }
+        return doctor;
     }
 
     public void deleteDoctorById(Long id) {
