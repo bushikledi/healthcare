@@ -18,8 +18,9 @@ public class DoctorService {
         return doctorRepository.findAll();
     }
 
-    public Optional<Doctor> findDoctorById(Long id) {
-        return doctorRepository.findById(id);
+    public Doctor findDoctorById(Long id) {
+        return doctorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Doctor not found"));
     }
 
     public Doctor saveDoctor(Doctor doctor) {
@@ -27,18 +28,21 @@ public class DoctorService {
         return doctor;
     }
 
-    public Doctor updateDoctor(Long id, Doctor doctor) {
-        Optional<Doctor> optionalDoctor = doctorRepository.findById(doctor.getId());
-        if (optionalDoctor.isPresent()) {
-            Doctor existingDoctor = optionalDoctor.get();
-            existingDoctor.setDoctorFirstname(doctor.getDoctorFirstname());
-            existingDoctor.setDoctorLastname(doctor.getDoctorLastname());
-            existingDoctor.setDoctorTelephone(doctor.getDoctorTelephone());
-            existingDoctor.setDoctorSpeciality(doctor.getDoctorSpeciality());
-            existingDoctor.setDoctorAbout(doctor.getDoctorAbout());
-            doctorRepository.save(existingDoctor);
-        }
-        return doctor;
+    public Doctor updateDoctor(Long id, Doctor updateDoctor) {
+        Doctor existingDoctor = doctorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Doctor not Found"));
+        if (!updateDoctor.getDoctorFirstname().isBlank())
+            existingDoctor.setDoctorFirstname(updateDoctor.getDoctorFirstname());
+        if (!updateDoctor.getDoctorLastname().isBlank())
+            existingDoctor.setDoctorLastname(updateDoctor.getDoctorLastname());
+        if (!updateDoctor.getDoctorTelephone().isBlank())
+            existingDoctor.setDoctorTelephone(updateDoctor.getDoctorTelephone());
+        if (updateDoctor.getDoctorSpeciality() != null)
+            existingDoctor.setDoctorSpeciality(updateDoctor.getDoctorSpeciality());
+        if (updateDoctor.getDoctorAbout().isBlank())
+            existingDoctor.setDoctorAbout(updateDoctor.getDoctorAbout());
+        doctorRepository.save(existingDoctor);
+        return existingDoctor;
     }
 
     public void deleteDoctorById(Long id) {

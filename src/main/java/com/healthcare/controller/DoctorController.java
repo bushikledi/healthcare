@@ -1,4 +1,5 @@
 package com.healthcare.controller;
+
 import com.healthcare.repository.DoctorRepository;
 import com.healthcare.service.DoctorService;
 
@@ -30,14 +31,12 @@ public class DoctorController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Doctor> getDoctorById(@PathVariable Long id) {
-        Optional<Doctor> doctor = doctorService.findDoctorById(id);
-        if (doctor == null) {
+        try {
+            return ResponseEntity.ok(doctorService.findDoctorById(id));
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
 
 
     @PostMapping("/add")
@@ -47,28 +46,24 @@ public class DoctorController {
     }
 
 
-
     @PutMapping("/{id}")
-    public ResponseEntity<Doctor> updateDoctor(@PathVariable Long id, @RequestBody Doctor doctor) {
-        Optional<Doctor> existingDoctor = doctorService.findDoctorById(id);
-        if (existingDoctor.isPresent()) {
-            Doctor updatedDoctor = doctorService.updateDoctor(id, doctor);
-            return new ResponseEntity<>(updatedDoctor, HttpStatus.OK);
-        } else {
+    public ResponseEntity<Void> updateDoctor(@PathVariable Long id, @RequestBody Doctor doctor) {
+        try {
+            doctorService.updateDoctor(id, doctor);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
 
-
-
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteDoctor(@PathVariable Long id) {
-        Optional<Doctor> doctor = doctorService.findDoctorById(id);
-        if (doctor == null) {
+        try {
+            doctorService.deleteDoctorById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        doctorService.deleteDoctorById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
