@@ -1,5 +1,6 @@
 package com.healthcare.service;
 
+import com.healthcare.model.enums.Role;
 import com.healthcare.model.records.UserRequest;
 import com.healthcare.configuration.PasswordEncoder;
 import com.healthcare.model.User;
@@ -29,6 +30,18 @@ public class UserService {
                 .password("")
                 .role(user.getRole())
                 .build();
+    }
+    public void registerAdmin(UserRequest request) {
+        User user = User.builder()
+                .firstname(request.firstname())
+                .lastname(request.lastname())
+                .email(request.email())
+                .gender(request.gender())
+                .dateOfBirth(request.dateOfBirth())
+                .password(passwordEncoder.encoder().encode(request.password()))
+                .role(Role.ADMIN)
+                .build();
+        userRepository.save(user);
     }
 
     @Transactional
