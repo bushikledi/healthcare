@@ -1,6 +1,8 @@
 package com.healthcare.service;
 
+import com.healthcare.model.Doctor;
 import com.healthcare.model.User;
+import com.healthcare.repository.DoctorRepository;
 import com.healthcare.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-
     private final UserRepository userRepository;
 
     @Transactional
