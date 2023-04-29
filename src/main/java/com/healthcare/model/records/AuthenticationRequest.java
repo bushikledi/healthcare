@@ -1,4 +1,4 @@
-package com.healthcare.authentication;
+package com.healthcare.model.records;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;

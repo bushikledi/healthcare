@@ -1,4 +1,4 @@
-package com.healthcare.authentication;
+package com.healthcare.model.records;
 
 import com.healthcare.model.enums.Gender;
 import jakarta.persistence.Column;

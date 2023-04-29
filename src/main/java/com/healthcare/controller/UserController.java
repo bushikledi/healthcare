@@ -1,8 +1,8 @@
 package com.healthcare.controller;
 
-import com.healthcare.authentication.UserRequest;
+import com.healthcare.model.records.UserRequest;
+import com.healthcare.model.records.UserResponse;
 import com.healthcare.service.UserService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,7 @@ public class UserController {
     }
 
     @GetMapping("/info")
-    public ResponseEntity<UserRequest> getUser() {
+    public ResponseEntity<UserResponse> getUser() {
         return ResponseEntity.ok(userService.getUser());
     }
 

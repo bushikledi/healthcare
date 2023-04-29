@@ -5,11 +5,14 @@ import com.healthcare.jwt.JwtService;
 import com.healthcare.model.Token;
 import com.healthcare.model.User;
 import com.healthcare.model.enums.Role;
+import com.healthcare.model.records.AuthenticationRequest;
+import com.healthcare.model.records.AuthenticationResponse;
+import com.healthcare.model.records.RefreshTokenResponse;
+import com.healthcare.model.records.UserRequest;
 import com.healthcare.repository.TokenRepository;
 import com.healthcare.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -80,7 +83,7 @@ public class JwtAuthService {
     public RefreshTokenResponse refreshToken(
             HttpServletRequest request
     ) {
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        final String authHeader = request.getHeader("refresh-token");
         final String refreshToken;
         final String userEmail;
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {

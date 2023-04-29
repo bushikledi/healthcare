@@ -1,5 +1,9 @@
 package com.healthcare.authentication;
 
+import com.healthcare.model.records.AuthenticationRequest;
+import com.healthcare.model.records.AuthenticationResponse;
+import com.healthcare.model.records.RefreshTokenResponse;
+import com.healthcare.model.records.UserRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,8 +1,9 @@
 package com.healthcare.service;
 
-import com.healthcare.authentication.UserRequest;
+import com.healthcare.model.records.UserRequest;
 import com.healthcare.configuration.PasswordEncoder;
 import com.healthcare.model.User;
+import com.healthcare.model.records.UserResponse;
 import com.healthcare.repository.TokenRepository;
 import com.healthcare.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -17,15 +18,16 @@ public class UserService {
     private final AuthenticationService authenticationService;
     private final PasswordEncoder passwordEncoder;
 
-    public UserRequest getUser() {
+    public UserResponse getUser() {
         User user = authenticationService.getUser();
-        return UserRequest.builder()
+        return UserResponse.builder()
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .dateOfBirth(user.getDateOfBirth())
                 .gender(user.getGender())
                 .email(user.getEmail())
                 .password("")
+                .role(user.getRole())
                 .build();
     }
 
