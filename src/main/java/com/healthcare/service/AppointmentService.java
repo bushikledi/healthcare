@@ -35,7 +35,7 @@ public class AppointmentService {
     }
 
 
-    public Appointment findBillingByUserId(Integer userId) {
+    public Appointment findAppointmentByUserId(Integer userId) {
         Appointment appointment = appointmentRepository.findByUserId(userId);
         if (appointment == null) {
             throw new RuntimeException("appointment not found for user with ID " + userId);
@@ -46,4 +46,6 @@ public class AppointmentService {
     public List<Appointment> findAllAppointment() {
         return appointmentRepository.findAll();
     }
+
+
 }
