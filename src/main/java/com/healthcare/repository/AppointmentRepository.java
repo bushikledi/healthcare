@@ -1,4 +1,8 @@
 package com.healthcare.repository;
 
-public interface AppointmentRepository {
+import com.healthcare.model.Appointment;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AppointmentRepository extends JpaRepository<Appointment,Integer> {
+    Appointment findByUserId(Integer userId);
 }
