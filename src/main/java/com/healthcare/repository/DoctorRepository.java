@@ -6,13 +6,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-
 @Repository
-public interface DoctorRepository extends JpaRepository<Doctor, String> {
+public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
 
-    Optional<Doctor> findBydoctorFirstname (String doctorFirstname);
-    void deleteById (Long id);
-    Optional<Doctor> findById (Long id);
-
-
-    }
+    Optional<Doctor> findByDoctorName(String doctorName);
+}

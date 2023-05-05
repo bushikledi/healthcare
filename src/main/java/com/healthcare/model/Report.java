@@ -3,34 +3,33 @@ package com.healthcare.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Time;
-import java.time.LocalDate;
+import java.time.Instant;
 
 @Entity
 @Getter
 @Setter
+@Table(name = "reports")
 @AllArgsConstructor
+@NoArgsConstructor
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int reportId;
 
-    @Column(name="report_time")
-    private Time reportTime;
+    @Column(name = "report_date")
+    private Instant reportDate;
 
-    @Column(name="report_date")
-    private LocalDate reportDate;
-
-    @Column(name="report_description")
+    @Column(name = "report_description")
     private String reportDescription;
 
-    @Column(name="user_id")
-    private int userId;
+    @Column(name = "user_id")
+    private Integer userId;
 
-    @Column(name="doctor_id")
-    private int doctorId;
+    @Column(name = "doctor_id")
+    private Integer doctorId;
 
 
 }

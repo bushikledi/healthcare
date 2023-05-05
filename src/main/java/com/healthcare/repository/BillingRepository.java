@@ -2,8 +2,11 @@ package com.healthcare.repository;
 
 import com.healthcare.model.Billing;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface BillingRepository extends JpaRepository<Billing,Integer> {
+import java.util.Optional;
 
-    Billing findByUserId(Integer userId);
+@Repository
+public interface BillingRepository extends JpaRepository<Billing, Integer> {
+    Optional<Billing> findByDoctorId(Integer doctorId);
 }

@@ -2,14 +2,15 @@ package com.healthcare.service;
 
 import com.healthcare.model.Report;
 import com.healthcare.repository.ReportRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class ReportService {
-
-    ReportRepository ReportRepository;
-
-    public ReportService(ReportRepository ReportRepository){ this.ReportRepository=ReportRepository;}
+    private final ReportRepository ReportRepository;
 
     public Report saveReport(Report report) {
         return ReportRepository.save(report);
@@ -30,7 +31,6 @@ public class ReportService {
         report.setReportDate(updatedReport.getReportDate());
         report.setReportDescription(updatedReport.getReportDescription());
         report.setDoctorId(updatedReport.getDoctorId());
-        report.setReportTime(updatedReport.getReportTime());
         return report;
     }
 

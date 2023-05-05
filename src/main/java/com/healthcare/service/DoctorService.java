@@ -1,51 +1,57 @@
 package com.healthcare.service;
 
+import com.healthcare.model.Billing;
 import com.healthcare.model.Doctor;
+import com.healthcare.model.records.DoctorRequest;
+import com.healthcare.repository.BillingRepository;
 import com.healthcare.repository.DoctorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class DoctorService {
 
-    @Autowired
-    private DoctorRepository doctorRepository;
+    private final DoctorRepository doctorRepository;
+    private final BillingRepository billingRepository;
 
     public List<Doctor> findAllDoctors() {
         return doctorRepository.findAll();
     }
 
-    public Doctor findDoctorById(Long id) {
+    public Doctor findDoctorById(Integer id) {
         return doctorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Doctor not found"));
     }
 
-    public Doctor saveDoctor(Doctor doctor) {
-        doctorRepository.save(doctor);
-        return doctor;
+    public void saveDoctor(DoctorRequest doctor) {
+        doctorRepository.save(Doctor.builder()
+                        .doctorAbout(doctor.doctorAbout())
+                        .doctorSpeciality(doctor.doctorSpeciality())
+                        .doctorName(doctor.doctorName())
+                .build());
+        Doctor doctor1 = doctorRepository.findByDoctorName(doctor.doctorName()).orElseThrow();
+        billingRepository.save(Billing.builder()
+                        .amount(doctor.amount())
+                        .doctorId(doctor1.getDoctorId())
+                .build());
     }
 
-    public Doctor updateDoctor(Long id, Doctor updateDoctor) {
+    public void updateDoctor(Integer id, Doctor updateDoctor) {
         Doctor existingDoctor = doctorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Doctor not Found"));
-        if (!updateDoctor.getDoctorFirstname().isBlank())
-            existingDoctor.setDoctorFirstname(updateDoctor.getDoctorFirstname());
-        if (!updateDoctor.getDoctorLastname().isBlank())
-            existingDoctor.setDoctorLastname(updateDoctor.getDoctorLastname());
-        if (!updateDoctor.getDoctorTelephone().isBlank())
-            existingDoctor.setDoctorTelephone(updateDoctor.getDoctorTelephone());
+        if (!updateDoctor.getDoctorName().isBlank())
+            existingDoctor.setDoctorName(updateDoctor.getDoctorName());
         if (updateDoctor.getDoctorSpeciality() != null)
             existingDoctor.setDoctorSpeciality(updateDoctor.getDoctorSpeciality());
         if (updateDoctor.getDoctorAbout().isBlank())
             existingDoctor.setDoctorAbout(updateDoctor.getDoctorAbout());
         doctorRepository.save(existingDoctor);
-        return existingDoctor;
     }
 
-    public void deleteDoctorById(Long id) {
+    public void deleteDoctorById(Integer id) {
         doctorRepository.deleteById(id);
     }
 

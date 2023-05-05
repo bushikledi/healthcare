@@ -2,15 +2,15 @@ package com.healthcare.service;
 
 import com.healthcare.model.Billing;
 import com.healthcare.repository.BillingRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class BillingService {
-    BillingRepository billingRepository;
-
-    public BillingService(BillingRepository billingRepository) {
-        this.billingRepository = billingRepository;
-    }
+    private final BillingRepository billingRepository;
 
     public Billing saveBilling(Billing billing) {
         return billingRepository.save(billing);
@@ -28,18 +28,15 @@ public class BillingService {
         Billing billing = billingRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Billing not found!"));
         billing.setAmount(updatedBilling.getAmount());
-        billing.setUserId(updatedBilling.getUserId());
+        billing.setDoctorId(updatedBilling.getDoctorId());
         billingRepository.save(billing);
         return billing;
     }
 
 
-    public Billing findBillingByUserId(Integer userId) {
-        Billing billing = billingRepository.findByUserId(userId);
-        if (billing == null) {
-            throw new RuntimeException("Billing not found for user with ID " + userId);
-        }
-        return billing;
+    public Billing getByDoctorId(Integer id) {
+        return billingRepository.findByDoctorId(id)
+                .orElseThrow(() -> new RuntimeException("Billing not found"));
     }
 
     public List<Billing> findAllBilling() {

@@ -10,6 +10,7 @@ import com.healthcare.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -58,7 +59,8 @@ public class ScheduleService {
     }
 
     public List<ScheduleResponse> getAll() {
-        return scheduleRepository.findAllByScheduleAvailability(ScheduleAvailability.AVAILABLE)
+        return scheduleRepository.findAllByScheduleAvailabilityAndScheduleDateAfter(
+                ScheduleAvailability.AVAILABLE, Instant.now())
                 .stream().map(schedule -> {
                     Doctor doctor = doctorRepository.findById(schedule.getDoctorId()).orElse(null);
                     return ScheduleResponse.builder()
@@ -66,12 +68,16 @@ public class ScheduleService {
                             .scheduleAvailability(schedule.getScheduleAvailability().name())
                             .scheduleDate(schedule.getScheduleDate())
                             .doctor(DoctorRecord.builder()
-                                    .doctorId(doctor.getId())
-                                    .name(doctor.getDoctorFirstname() + " " + doctor.getDoctorLastname())
+                                    .doctorId(doctor.getDoctorId())
+                                    .name(doctor.getDoctorName())
                                     .speciality(doctor.getDoctorSpeciality().name())
                                     .build())
                             .build();
                 }).toList();
     }
 
+    public void save(Schedule schedule) {
+        schedule.setScheduleAvailability(ScheduleAvailability.AVAILABLE);
+        scheduleRepository.save(schedule);
+    }
 }

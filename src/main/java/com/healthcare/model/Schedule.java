@@ -24,5 +24,5 @@ public class Schedule {
     @Column(name = "schedule_availability")
     private ScheduleAvailability scheduleAvailability;
     @Column(name = "doctor_id")
-    private Long doctorId;
+    private Integer doctorId;
 }

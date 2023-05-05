@@ -2,7 +2,9 @@ package com.healthcare.repository;
 
 import com.healthcare.model.Report;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ReportRepository extends JpaRepository<Report,Integer> {
     Report findByUserId(Integer userId);
 }

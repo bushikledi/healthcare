@@ -2,19 +2,21 @@ package com.healthcare.controller;
 
 import com.healthcare.model.Report;
 import com.healthcare.service.ReportService;
+import jakarta.annotation.security.RolesAllowed;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/report")
 public class ReportController {
-    com.healthcare.service.ReportService ReportService;
+    private final ReportService ReportService;
 
-    ReportController(ReportService ReportService) {
-        this.ReportService = ReportService;
-    }
-
+    @RolesAllowed("ADMIN")
     @PostMapping("/create")
     public ResponseEntity<Void> createReport(@RequestBody Report report) {
         ReportService.saveReport(report);
@@ -46,7 +48,7 @@ public class ReportController {
         }
 
     }
-    @GetMapping("/Report")
+    @GetMapping("/reports")
     public ResponseEntity<List<Report>> findAllReport() {
         return new ResponseEntity<>(ReportService.findAllReport(), HttpStatus.OK);
     }
